@@ -6,7 +6,8 @@ def less(a, b):
 	return False
 
 def merge(left, right):
-	i = j = 0
+	i = 0
+	j = 0
 	len_l = len(left)
 	len_r = len(right)
 	new_array = []
@@ -30,42 +31,49 @@ def merge(left, right):
 def sort(array):
 	if len(array) < 2:
 		return array
-	left = sort(array[:(len(array) // 2)])
-	right = sort(array[(len(array) // 2):])
+	middle = len(array) // 2
+	left = sort(array[:middle])
+	right = sort(array[middle:])
 	return merge(left, right)
 
-def get_number(string):
-	number = 0
-	i = 0
-	if string == 'L':
-		return 50
-	while i < len(string) and string[i] == 'X':
-		number += 10
-		i += 1
-	string = string[i:]
-	if len(string) == 0:
-		return number
-	if string == 'L':
-		return 40
-	if string[0] == 'L':
-		number = 40
-		string = string[1:]
-	if string[-1] == 'X':
-		return number + 9
-	pos_5 = string.find('V')
-	if pos_5 == -1:
-		return number + len(string)
-	if pos_5 == 1:
-		return number + 4
-	return number + 5 + len(string) - 1
+def get_number(rom_num):
+	dozens = 0
+	ones = 0
+
+	if rom_num == 'L':
+		dozens = 5
+		rom_num = ''
+	elif rom_num[:2] == 'XL':
+		dozens = 4
+		rom_num = rom_num[2:]
+	elif rom_num[-2:] == 'IX':
+		dozens = rom_num.count('X') - 1
+		rom_num = rom_num[dozens:]
+	else:
+		dozens = rom_num.count('X')
+		rom_num = rom_num[dozens:]
+
+	pos_5 = rom_num.find('V')
+	if len(rom_num) == 0:
+		ones = 0
+	elif rom_num[-1] == 'X':
+		ones = 9
+	elif pos_5 == -1:
+		ones = len(rom_num)
+	elif pos_5 == 1:
+		ones = 4
+	else:
+		ones = 4 + len(rom_num)
+
+	return dozens * 10 + ones
 
 array = list()
 n = int(input())
 for i in range(n):
-	row = [0] * 3
+	row = [0, 0, 0]
 	row[0] = input()
 	row[1] = row[0].find(' ')
-	row[2] = get_number(row[0][row[1] + 1:])
+	row[2] = get_number(row[0][row[1] + 1 :])
 	array.append(row)
 sorted_array = sort(array)
 for i in range(n):

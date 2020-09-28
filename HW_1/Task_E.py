@@ -1,28 +1,30 @@
-def split(array, mean):
-	p1 = -1
+def split(array, left, right, mean):
+	pvt = left
 	count_mid = 0
-	for i in range(0, len(array)):
+	for i in range(left, right):
+		swap_idx = pvt + count_mid
 		if array[i] < mean:
-			array[p1 + 1], array[i] = array[i], array[p1 + 1]
+			array[pvt], array[i] = array[i], array[pvt]
 			if count_mid > 0:
-				array[p1 + count_mid + 1], array[i] = array[i], array[p1 + count_mid + 1]
-			p1 += 1
+				array[swap_idx], array[i] = array[i], array[swap_idx]
+			pvt += 1
 		elif array[i] == mean:
-			array[p1 + count_mid + 1], array[i] = array[i], array[p1 + count_mid + 1]
+			array[swap_idx], array[i] = array[i], array[swap_idx]
 			count_mid += 1
-	return array[:p1 + 1], array[p1 + 1:p1 + count_mid + 1], array[p1 + count_mid + 1:]
+	return pvt, pvt + count_mid
 
-def sort(array):
-	if len(array) < 2:
-		return array
-	mean = (array[0] + array[-1]) / 2
-	left, mid, right = split(array, mean)
-	left = sort(left)
-	right = sort(right)
-	return left + mid + right
+def sort(array, left, right):
+	if right - left < 2:
+		return
+	mean = (array[left] + array[right - 1]) / 2
+	pvt1, pvt2 = split(array, left, right, mean)
+	sort(array, left, pvt1)
+	sort(array, pvt2, right)
+	return
+	
 n = int(input())
 array = list(map(int, input().split(' ')))
-array = sort(array)
+sort(array, 0, n)
 array = list(map(str, array))
 row = ' '.join(array)
 print(row)

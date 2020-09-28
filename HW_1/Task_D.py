@@ -1,5 +1,6 @@
 def merge(left, right):
-	i = j = 0
+	i = 0
+	j = 0
 	len_l = len(left)
 	len_r = len(right)
 	new_array = []
@@ -23,11 +24,11 @@ def merge(left, right):
 	return new_array, counter
 
 def sort(array):
-
 	if len(array) < 2:
 		return array, 0
-	left, counter_l = sort(array[:(len(array) // 2)])
-	right, counter_r = sort(array[(len(array) // 2):])
+	middle = len(array) // 2
+	left, counter_l = sort(array[:middle])
+	right, counter_r = sort(array[middle:])
 	array, counter_add = merge(left, right)
 	return array, counter_l + counter_r + counter_add
 

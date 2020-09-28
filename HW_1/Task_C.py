@@ -1,5 +1,6 @@
 def merge(left, right):
-	i = j = 0
+	i = 0
+	j = 0
 	len_l = len(left)
 	len_r = len(right)
 	new_array = []
@@ -23,8 +24,9 @@ def merge(left, right):
 def sort(array):
 	if len(array) < 2:
 		return array
-	left = sort(array[:(len(array) // 2)])
-	right = sort(array[(len(array) // 2):])
+	middle = len(array) // 2
+	left = sort(array[:middle])
+	right = sort(array[middle:])
 	return merge(left, right)
 
 n = int(input())
